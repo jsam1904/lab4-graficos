@@ -155,6 +155,31 @@ fn render_grid(model: &Model, fb: &mut Framebuffer) {
     fb.line(0, h, WIDTH - 1, h, GRID);
 }
 
+/// Exporta una vuelta completa del modo libre a `path` como GIF animado.
+fn export_gif(model: &Model, path: &str) -> Result<(), String> {
+    const W: i32 = 600;
+    const H: i32 = 500;
+    const FRAMES: usize = 90;
+    let mut fb = Framebuffer::new(W, H);
+    let file = std::fs::File::create(path).map_err(|e| format!("No se pudo crear {path}: {e}"))?;
+    let mut enc = gif::Encoder::new(file, W as u16, H as u16, &[]).map_err(|e| e.to_string())?;
+    enc.set_repeat(gif::Repeat::Infinite).map_err(|e| e.to_string())?;
+
+    for i in 0..FRAMES {
+        let view = View {
+            name: "Libre",
+            yaw: i as f32 / FRAMES as f32 * 2.0 * PI,
+            pitch: 0.35, // un poco desde arriba
+        };
+        fb.clear(BG);
+        render_titled(model, &mut fb, &view, (0, 0, W, H), true, 3);
+        let mut frame = gif::Frame::from_rgba_speed(W as u16, H as u16, &mut fb.pixels.clone(), 10);
+        frame.delay = 4; // centésimas de segundo: 25 cuadros por segundo
+        enc.write_frame(&frame).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
 /// Qué se muestra en la ventana.
 enum Mode {
     Grid,
@@ -166,12 +191,23 @@ fn main() {
     let path = args.iter().skip(1).find(|a| !a.starts_with("--")).cloned()
         .unwrap_or_else(|| "assets/Nave_Javier_Alvarado.obj".to_string());
     let screenshot = args.iter().any(|a| a == "--screenshot");
+    let gif = args.iter().any(|a| a == "--gif");
 
     let model = Model::load(&path).unwrap_or_else(|e| {
         eprintln!("{e}");
         std::process::exit(1);
     });
     println!("OBJ cargado: {} vértices, {} triángulos", model.vertices.len(), model.indices.len() / 3);
+
+    // Modo GIF: exporta la rotación del modo libre sin abrir ventana.
+    if gif {
+        if let Err(e) = export_gif(&model, "rotacion.gif") {
+            eprintln!("{e}");
+            std::process::exit(1);
+        }
+        println!("GIF guardado en rotacion.gif");
+        return;
+    }
 
     let mut fb = Framebuffer::new(WIDTH, HEIGHT);
 
