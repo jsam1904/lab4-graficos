@@ -23,15 +23,16 @@ struct View {
     pitch: f32,
 }
 
-/// Vistas fijas. La cámara mira hacia -z después de rotar; con yaw = 0 se ve la parte de atrás.
+/// Vistas fijas. La cámara mira hacia -z después de rotar; con yaw = 0 se ve el frente
+/// (la nave apunta hacia +z y su lado derecho queda en -x).
 const VIEWS: [View; 7] = [
-    View { name: "Frente", yaw: PI, pitch: 0.0 },
-    View { name: "Atrás", yaw: 0.0, pitch: 0.0 },
-    View { name: "Izquierda", yaw: FRAC_PI_2, pitch: 0.0 },
-    View { name: "Derecha", yaw: -FRAC_PI_2, pitch: 0.0 },
+    View { name: "Frente", yaw: 0.0, pitch: 0.0 },
+    View { name: "Atrás", yaw: PI, pitch: 0.0 },
+    View { name: "Izquierda", yaw: -FRAC_PI_2, pitch: 0.0 },
+    View { name: "Derecha", yaw: FRAC_PI_2, pitch: 0.0 },
     View { name: "Arriba", yaw: PI, pitch: FRAC_PI_2 },
     View { name: "Abajo", yaw: PI, pitch: -FRAC_PI_2 },
-    View { name: "Isométrica", yaw: PI + FRAC_PI_4, pitch: 0.6 },
+    View { name: "Isométrica", yaw: FRAC_PI_4, pitch: 0.6 },
 ];
 
 /// Vistas que aparecen en la cuadrícula de 3x2 (índices de VIEWS).
