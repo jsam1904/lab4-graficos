@@ -6,6 +6,10 @@ Renderizador por software en Rust que carga un modelo `.obj` y dibuja sus trián
 
 *Modelo de la nave: 172 vértices, 364 triángulos.*
 
+![Nave rotando en el modo libre](rotacion.gif)
+
+*Modo libre: una vuelta completa alrededor de la nave.*
+
 ## Características
 
 - **Vistas** (`src/main.rs`): cada vista es un giro en y (yaw) y una inclinación en x (pitch) que se aplican a los vértices antes de proyectar. Por defecto se muestran seis vistas en una cuadrícula de 3×2.
@@ -15,6 +19,7 @@ Renderizador por software en Rust que carga un modelo `.obj` y dibuja sus trián
 - **Títulos**: cada vista lleva su nombre centrado arriba (FRENTE, ATRAS, …), dibujado en el framebuffer, así que también sale en la captura PNG.
 - **Render** (`src/main.rs`): centra y escala el modelo para que ocupe ~88 % de su área (la ventana de 900×700 o una celda de la cuadrícula). Usa proyección ortográfica: después de rotar se descarta la coordenada z.
 - **Modo captura**: exporta la cuadrícula de vistas a `screenshot.png` sin abrir ventana.
+- **Modo GIF**: exporta una vuelta completa del modo libre a `rotacion.gif` (600×500, 90 cuadros a 25 FPS, en bucle) sin abrir ventana. Usa el crate [`gif`](https://crates.io/crates/gif).
 
 ## Cómo funciona
 
@@ -50,6 +55,9 @@ cargo run --release -- ruta/al/modelo.obj
 
 # Genera screenshot.png sin abrir ventana
 cargo run --release -- --screenshot
+
+# Genera rotacion.gif (modo libre) sin abrir ventana
+cargo run --release -- --gif
 ```
 
 ### Controles
@@ -75,6 +83,7 @@ Los argumentos que empiezan con `--` se tratan como opciones; el primero que no 
 │   ├── obj.rs          # Cargador de archivos OBJ
 │   └── framebuffer.rs  # Framebuffer y primitivas de dibujo
 ├── screenshot.png      # Captura de las seis vistas, generada con --screenshot
+├── rotacion.gif        # Rotación del modo libre, generada con --gif
 └── Cargo.toml
 ```
 
