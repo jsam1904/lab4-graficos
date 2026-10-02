@@ -44,15 +44,16 @@ impl Model {
         Ok(Model { vertices, indices })
     }
 
-    /// Caja envolvente en x,y: (min_x, max_x, min_y, max_y)
-    pub fn bounds_xy(&self) -> (f32, f32, f32, f32) {
-        let mut b = (f32::MAX, f32::MIN, f32::MAX, f32::MIN);
+    /// Caja envolvente en 3D: (mínimos, máximos) por eje.
+    pub fn bounds(&self) -> ([f32; 3], [f32; 3]) {
+        let mut min = [f32::MAX; 3];
+        let mut max = [f32::MIN; 3];
         for v in &self.vertices {
-            b.0 = b.0.min(v[0]);
-            b.1 = b.1.max(v[0]);
-            b.2 = b.2.min(v[1]);
-            b.3 = b.3.max(v[1]);
+            for i in 0..3 {
+                min[i] = min[i].min(v[i]);
+                max[i] = max[i].max(v[i]);
+            }
         }
-        b
+        (min, max)
     }
 }
