@@ -28,7 +28,7 @@ La fuente solo tiene las letras que usan los títulos y no lleva tildes ("Atrás
 
 Colores: fondo `rgb(14, 16, 24)` y líneas `rgb(120, 220, 255)`.
 
-La vista desde +z se toma como "Atrás", así que "Frente" mira desde −z, "Derecha" desde +x y "Arriba" desde +y. Si el modelo se exportó con otros ejes, basta con ajustar los ángulos del arreglo `VIEWS` en `src/main.rs`.
+La nave apunta hacia +z: "Frente" mira desde +z, "Atrás" desde −z, "Derecha" desde −x, "Izquierda" desde +x y "Arriba" desde +y. Si el modelo se exportó con otros ejes, basta con ajustar los ángulos del arreglo `VIEWS` en `src/main.rs`.
 
 ## Requisitos
 
@@ -80,4 +80,4 @@ Los argumentos que empiezan con `--` se tratan como opciones; el primero que no 
 
 ## Autor
 
-Javier Alvarado
+Javier Alvarado - 24546
